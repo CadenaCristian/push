@@ -16,20 +16,32 @@ function App() {
   }
 
   function verEstados() {
-    let letraP = cadenaEntrante.indexOf("P")
-    let letraU = cadenaEntrante.indexOf("U")
-    let letraS = cadenaEntrante.indexOf("S")
-    let letraH = cadenaEntrante.indexOf("H")
+    let letraP = cadenaEntrante.indexOf("P");
+    let letraU = cadenaEntrante.indexOf("U");
+    let letraS = cadenaEntrante.indexOf("S");
+    let letraH = cadenaEntrante.indexOf("H");
+    let inicial = 0;
+    let final = 1;
     if (letraP >= 0 && letraU >= 0 && letraS >= 0 && letraH >= 0) {
       setmostra(true)
       for (let i in cadenaEntrante) {
-        estado.push(cadenaEntrante[i])
+        if (estado.indexOf(cadenaEntrante[i]) === -1) {
+          console.log("LA LETRA NO EXISTE: ", cadenaEntrante[i])
+          estado.push(cadenaEntrante[i])
+          estadoFinal.push("Q" + inicial + " " + cadenaEntrante[i] + " = " + "Q" + final)
+        }
+        else {
+          final -= 1
+          estadoFinal.push("Q" + inicial + " " + cadenaEntrante[i] + " = " + "Q" + final)
+          inicial -= 1
+          console.log("LA LETRA YA EXISTE: ", cadenaEntrante[i])
+        }
+        inicial += 1
+        final += 1
       }
-      setestadoFinal(estado)
-      console.log("estadoFinal: ", estadoFinal)
     } else {
       setmostra(false)
-      setmensaje("LA CADENA NO ES CORRECTA")
+      setmensaje("LA CADENA NO ES VALIDA")
     }
   }
 
@@ -58,20 +70,24 @@ function App() {
         <div className="col-md-4"></div>
         <div className="col-md-4">
           {mostra === true ?
-            <table className="table table-striped table-hover col-md-3">
-              <thead>
-                <tr className="text-center">
-                  <th scope="col">ESTADO ACTUAL</th>
-                </tr>
-              </thead>
-              <tbody>
-                {estado.map((est, index) => <tr key={index}>
-                  <td className="text-center col-md-6">Q{index} {est} = Q{index + 1}</td>
-                </tr>)}
-              </tbody>
-            </table>
+            <div>
+              <h5 className="alert alert-primary text-center mt-2" role="alert">LA CADENA ES VALIDA</h5>
+              <table className="table table-striped table-hover col-md-3">
+                <thead>
+                  <tr className="text-center">
+                    <th scope="col">ESTADO ACTUAL</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {estadoFinal.map((est, index) => <tr key={index}>
+                    <td className="text-center col-md-6">{est}</td>
+
+                  </tr>)}
+                </tbody>
+              </table>
+            </div>
             :
-            <h5 className="mt-3">{mensaje}</h5>}
+            <h5 className="alert alert-danger text-center mt-3" role="alert">{mensaje}</h5>}
         </div>
         <div className="col-md-4"></div>
       </div>
